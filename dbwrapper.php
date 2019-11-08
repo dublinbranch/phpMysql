@@ -55,7 +55,7 @@ function getLine(&$sql){
 }
 
 
-function getAll(&$sql, $resulttype){
+function getAll(&$sql, $resulttype=MYSQLI_ASSOC){
     $res = $this->query($sql);
     $rows = mysqli_fetch_all($res, $resulttype);
     

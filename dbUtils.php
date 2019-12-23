@@ -1,0 +1,13 @@
+<?php
+
+function base64this($val){
+	$v = base64_encode($val);
+	return " FROM_BASE64('$v') ";
+}
+
+function base64nullable($val){
+    if(is_null($val) || strtolower($val) == 'null'){
+        return $val;
+    }
+    return base64this($val);
+}

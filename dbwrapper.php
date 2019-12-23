@@ -11,6 +11,7 @@ require_once __DIR__ . "/../db-config.php";
 
 class DBWrapper{
 	private $conn;
+	private $lastId;
 	function __construct(DBConf $conf){
 		$this->conn = new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db);
 	}
@@ -31,12 +32,14 @@ function query(&$sql,$verbose = false,$keep = false){
         throw new Exception($err);
     }
     $res = $this->conn->query($sql);
+
     if($res === false || $this->conn->error){
         $err = "$sql is wrong, error is " . $this->conn->error . "\n";
         fwrite(STDERR, $err);
         file_put_contents("error.log",$err, FILE_APPEND |  FILE_APPEND );
         throw new Exception($err);
     }
+    $this->lastId = $this->conn->insert_id;
     $time = microtime(1) - $start;
     if(defined('VERBOSE_SQL_TIME') && VERBOSE_SQL_TIME == true){
         echo "\n ---------- \n$sql\nin $time \n";
@@ -60,5 +63,9 @@ function getAll(&$sql, $resulttype=MYSQLI_ASSOC){
     $rows = mysqli_fetch_all($res, $resulttype);
     
     return $rows;
+}
+
+function getLastId() {
+	    return $this->lastId;
 }
 }

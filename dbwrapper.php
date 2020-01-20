@@ -5,6 +5,7 @@ class DBConf{
 	var $user;
 	var $passwd;
 	var $db; //default database
+	var $port = 3306;
 }
 
 require_once __DIR__ . "/../db-config.php";
@@ -13,7 +14,7 @@ class DBWrapper{
 	private $conn;
 	private $lastId;
 	function __construct(DBConf $conf){
-		$this->conn = new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db);
+		$this->conn = new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port);
 	}
 	
 function query(&$sql,$verbose = false,$keep = false){

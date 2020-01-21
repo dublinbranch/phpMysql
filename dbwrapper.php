@@ -6,6 +6,8 @@ class DBConf
     public $user;
     public $passwd;
     public $db; //default database
+    public $port = 3306;
+
 }
 
 require_once __DIR__ . "/../db-config.php";
@@ -14,11 +16,12 @@ class DBWrapper
 {
     private $conn;
     private $lastId;
+
     public function __construct(DBConf $conf)
     {
-        $this->conn = new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db);
+        $this->conn = new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port);
     }
-    
+
     public function query(&$sql, $verbose = false, $keep = false)
     {
         // debug
@@ -32,7 +35,7 @@ class DBWrapper
         if (strlen($sql) < 2) {
             $err = "$sql is too short SEPPUKU!\n";
             fwrite(STDERR, $err);
-            file_put_contents("error.log", $err, FILE_APPEND |  FILE_APPEND);
+            file_put_contents("error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
         }
         $res = $this->conn->query($sql);
@@ -40,7 +43,7 @@ class DBWrapper
         if ($res === false || $this->conn->error) {
             $err = "$sql is wrong, error is " . $this->conn->error . "\n";
             fwrite(STDERR, $err);
-            file_put_contents("error.log", $err, FILE_APPEND |  FILE_APPEND);
+            file_put_contents("error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
         }
         $this->lastId = $this->conn->insert_id;
@@ -63,11 +66,11 @@ class DBWrapper
     }
 
 
-    public function getAll(&$sql, $resulttype=MYSQLI_ASSOC)
+    public function getAll(&$sql, $resulttype = MYSQLI_ASSOC)
     {
         $res = $this->query($sql);
         $rows = mysqli_fetch_all($res, $resulttype);
-    
+
         return $rows;
     }
 

@@ -26,7 +26,7 @@ $db = new DBWrapper($db2);
 //-------------------------------------------------------
 // https://www.w3schools.com/php/func_mysqli_fetch_all.asp
 // echo 'test getAll() MYSQLI_ASSOC';
-// 
+//
 // $sql = "SELECT * FROM tracking";
 // $rows = $db->getAll($sql, MYSQLI_ASSOC);
 // foreach ($rows as &$row) {
@@ -42,5 +42,3 @@ $rows = $db->getAll($sql, MYSQLI_NUM);
 foreach ($rows as &$row) {
     print_r($row);
 }
-
-

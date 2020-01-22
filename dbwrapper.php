@@ -18,6 +18,7 @@ class DBWrapper
     {
         $this->conn= new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db);
         $this->conn->set_charset("utf8");
+        
     }
     
     public function query(&$sql, $verbose = false, $keep = false)

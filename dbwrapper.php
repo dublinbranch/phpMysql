@@ -7,7 +7,6 @@ class DBConf
     public $passwd;
     public $db; //default database
     public $port = 3306;
-
 }
 
 require_once __DIR__ . "/../db-config.php";
@@ -21,7 +20,6 @@ class DBWrapper
     {
         $this->conn= new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port);
         $this->conn->set_charset("utf8");
-        
     }
 
     public function query(&$sql, $verbose = false, $keep = false)

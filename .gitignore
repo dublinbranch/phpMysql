@@ -1,3 +1,4 @@
 .directory
-
+*~
 db-config.php
+*.cache

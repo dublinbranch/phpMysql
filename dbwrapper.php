@@ -79,3 +79,10 @@ class DBWrapper
         return $this->lastId;
     }
 }
+
+/* Goodies
+
+$res->num_rows;
+
+
+*/

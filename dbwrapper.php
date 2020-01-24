@@ -22,6 +22,44 @@ class DBWrapper
         $this->conn->set_charset("utf8");
     }
 
+    public function multiQuery(&$sql, $verbose = false, $keep = false)
+    {
+        $start = microtime(1);
+        if ($verbose) {
+            echo "Executing $sql \n";
+        }
+        if (strlen($sql) < 2) {
+            $err = "$sql is too short SEPPUKU!\n";
+            fwrite(STDERR, $err);
+            file_put_contents("error.log", $err, FILE_APPEND | FILE_APPEND);
+            throw new Exception($err);
+        }
+        $res = $this->conn->multi_query($sql);
+
+        if ($res === false || $this->conn->error) {
+            $err = "$sql is wrong, error is " . $this->conn->error . "\n";
+            fwrite(STDERR, $err);
+            file_put_contents("error.log", $err, FILE_APPEND |  FILE_APPEND);
+            throw new Exception($err);
+        }
+        
+        do {
+            if ($res = $this->conn->store_result()) {
+                $res->free();
+            }
+        } while ($this->conn->more_results() && $this->conn->next_result());
+
+        
+        $time = microtime(1) - $start;
+        if (defined('VERBOSE_SQL_TIME') && VERBOSE_SQL_TIME == true) {
+            echo "\n ---------- \n$sql\nin $time \n";
+        }
+        if (!$keep) {
+            $sql = '';
+            unset($sql);
+        }
+    }
+    
     public function query(&$sql, $verbose = false, $keep = false)
     {
         // debug

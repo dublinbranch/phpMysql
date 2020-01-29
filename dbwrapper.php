@@ -60,6 +60,10 @@ class DBWrapper
         }
     }
     
+    public function singleShotQuery($sql, $verbose = false, $keep = false){
+		return $this->query($sql, $verbose, $keep);
+    }
+    
     public function query(&$sql, $verbose = false, $keep = false)
     {
         // debug

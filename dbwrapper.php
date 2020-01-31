@@ -42,14 +42,27 @@ class DBWrapper
             file_put_contents("error.log", $err, FILE_APPEND |  FILE_APPEND);
             throw new Exception($err);
         }
-        
+        /*
         do {
             if ($res = $this->conn->store_result()) {
                 $res->free();
             }
         } while ($this->conn->more_results() && $this->conn->next_result());
-
+        */
         
+        
+        $results = [];
+    do {
+        /* store first result set */
+        if ($result = $this->conn->store_result()) {
+            while ($row = $result->fetch_object()) {
+                $results[] = $row;
+            }
+            $result->free();
+        }
+    } while ($this->conn->next_result());
+
+
         $time = microtime(1) - $start;
         if (defined('VERBOSE_SQL_TIME') && VERBOSE_SQL_TIME == true) {
             echo "\n ---------- \n$sql\nin $time \n";
@@ -58,6 +71,7 @@ class DBWrapper
             $sql = '';
             unset($sql);
         }
+        return $results;
     }
     
     public function singleShotQuery($sql, $verbose = false, $keep = false)

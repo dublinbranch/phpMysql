@@ -48,12 +48,17 @@ class DBWrapper
             throw new Exception($err);
         }
 
-        do {
-            if ($res = $this->conn->store_result()) {
-                $res->free();
-            }
-        } while ($this->conn->more_results() && $this->conn->next_result());
 
+        $results = [];
+        do {
+            /* store first result set */
+            if ($result = $this->conn->store_result()) {
+                while ($row = $result->fetch_object()) {
+                    $results[] = $row;
+                }
+                $result->free();
+            }
+        } while ($this->conn->next_result());
 
         $time = microtime(1) - $start;
         if (defined('VERBOSE_SQL_TIME') && VERBOSE_SQL_TIME == true) {
@@ -63,6 +68,7 @@ class DBWrapper
             $sql = '';
             unset($sql);
         }
+        return $results;
     }
 
     public function singleShotQuery($sql, $verbose = false, $keep = false)
@@ -127,7 +133,8 @@ class DBWrapper
         return $this->lastId;
     }
 
-    public function affectedRows(){
+    public function affectedRows()
+    {
         return $this->conn->affected_rows;
     }
 }

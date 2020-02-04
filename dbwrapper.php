@@ -18,8 +18,13 @@ class DBWrapper
 
     public function __construct(DBConf $conf)
     {
-        $this->conn= new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port);
+        $this->conn = new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port);
         $this->conn->set_charset("utf8");
+    }
+
+    public function getConn()
+    {
+        return $this->conn;
     }
 
     public function multiQuery(&$sql, $verbose = false, $keep = false)
@@ -39,17 +44,17 @@ class DBWrapper
         if ($res === false || $this->conn->error) {
             $err = "$sql is wrong, error is " . $this->conn->error . "\n";
             fwrite(STDERR, $err);
-            file_put_contents("error.log", $err, FILE_APPEND |  FILE_APPEND);
+            file_put_contents("error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
         }
-        
+
         do {
             if ($res = $this->conn->store_result()) {
                 $res->free();
             }
         } while ($this->conn->more_results() && $this->conn->next_result());
 
-        
+
         $time = microtime(1) - $start;
         if (defined('VERBOSE_SQL_TIME') && VERBOSE_SQL_TIME == true) {
             echo "\n ---------- \n$sql\nin $time \n";
@@ -59,12 +64,12 @@ class DBWrapper
             unset($sql);
         }
     }
-    
+
     public function singleShotQuery($sql, $verbose = false, $keep = false)
     {
         return $this->query($sql, $verbose, $keep);
     }
-    
+
     public function query(&$sql, $verbose = false, $keep = false)
     {
         // debug
@@ -86,7 +91,7 @@ class DBWrapper
         if ($res === false || $this->conn->error) {
             $err = "$sql is wrong, error is " . $this->conn->error . "\n";
             fwrite(STDERR, $err);
-            file_put_contents("error.log", $err, FILE_APPEND |  FILE_APPEND);
+            file_put_contents("error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
         }
         $this->lastId = $this->conn->insert_id;
@@ -120,6 +125,10 @@ class DBWrapper
     public function getLastId()
     {
         return $this->lastId;
+    }
+
+    public function affectedRows(){
+        return $this->conn->affected_rows;
     }
 }
 

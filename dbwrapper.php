@@ -83,7 +83,7 @@ class DBWrapper
 //     echo "len = ", strlen($sql), ' ';
 
         $start = microtime(1);
-        if ($verbose) {
+        if ($verbose ||  (defined("ECHO_SQL") && ECHO_SQL ) ){
             echo "Executing $sql \n";
         }
         if (strlen($sql) < 2) {

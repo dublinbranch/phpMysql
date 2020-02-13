@@ -9,7 +9,7 @@ function base64this($val)
 function base64nullable($val)
 {
     if (is_null($val) || strtolower($val) == 'null') {
-        return $val;
+        return 'NULL';
     }
     return base64this($val);
 }

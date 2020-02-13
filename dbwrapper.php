@@ -29,7 +29,7 @@ class DBWrapper
 
     public function multiQuery(&$sql, $verbose = false, $keep = false)
     {
-       die("is in some way broken, I (Roy) am not able to find a single working example with proper error reporting");
+        throw new Exception("multiQuery is in some way broken, I (Roy) am not able to find a single working example with proper error reporting");
     }
 
     public function singleShotQuery($sql, $verbose = false, $keep = false)

@@ -94,6 +94,10 @@ class DBWrapper
         return $this->lastId;
     }
 
+    /**
+     * countrary to what documentation states, this return -1 for select
+     * @return int
+     */
     public function affectedRows()
     {
         return $this->conn->affected_rows;

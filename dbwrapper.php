@@ -98,9 +98,11 @@ class DBWrapper
      * countrary to what documentation states, this return -1 for select
      * @return int
      */
-    public function affectedRows()
+    public function affectedRows() : int
     {
-        return $this->conn->affected_rows;
+        //for some reason this need to be explicitly swapped, or will be optimized away
+        $broken = $this->conn->affected_rows;
+        return $broken;
     }
 }
 

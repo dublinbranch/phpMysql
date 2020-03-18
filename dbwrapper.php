@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/dbUtils.php';
 
 class DBConf
 {
@@ -44,7 +45,7 @@ class DBWrapper
 //     echo "len = ", strlen($sql), ' ';
 
         $start = microtime(1);
-        if ($verbose ||  (defined("ECHO_SQL") && ECHO_SQL ) ){
+        if ($verbose || (defined("ECHO_SQL") && ECHO_SQL)) {
             echo "Executing $sql \n";
         }
         if (strlen($sql) < 2) {
@@ -73,6 +74,12 @@ class DBWrapper
         return $res;
     }
 
+    public function getLineSS($sql)
+    {
+        $res = $this->query($sql);
+        $row = $res->fetch_object();
+        return $row;
+    }
 
     public function getLine(&$sql)
     {
@@ -89,6 +96,16 @@ class DBWrapper
         return $rows;
     }
 
+    public function getAllObj(&$sql)
+    {
+        $res = $this->query($sql);
+        $arr = [];
+        while ($row = $res->fetch_object()) {
+            $arr[] = $row;
+        }
+        return $arr;
+    }
+
     public function getLastId()
     {
         return $this->lastId;
@@ -98,7 +115,7 @@ class DBWrapper
      * countrary to what documentation states, this return -1 for select
      * @return int
      */
-    public function affectedRows() : int
+    public function affectedRows(): int
     {
         //for some reason this need to be explicitly swapped, or will be optimized away
         $broken = $this->conn->affected_rows;

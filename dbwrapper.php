@@ -50,7 +50,7 @@ class DBWrapper
         }
         if (strlen($sql) < 2) {
 		$err = "$sql is too short SEPPUKU!\n";
-		if(defined(STDERR)){
+		if(defined("STDERR")){
 			fwrite(STDERR, $err);
 		}
             file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | FILE_APPEND);
@@ -60,7 +60,7 @@ class DBWrapper
 
         if ($res === false || $this->conn->error) {
             $err = "$sql is wrong, error is " . $this->conn->error . "\n";
-	                    if(defined(STDERR)){
+	                    if(defined("STDERR")){
                         fwrite(STDERR, $err);
                 }
 

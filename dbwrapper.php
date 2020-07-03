@@ -53,7 +53,7 @@ class DBWrapper
 		if(defined(STDERR)){
 			fwrite(STDERR, $err);
 		}
-            file_put_contents("error.log", $err, FILE_APPEND | FILE_APPEND);
+            file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
         }
         $res = $this->conn->query($sql);
@@ -64,7 +64,7 @@ class DBWrapper
                         fwrite(STDERR, $err);
                 }
 
-	    file_put_contents("error.log", $err, FILE_APPEND | FILE_APPEND);
+            file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
         }
         $this->lastId = $this->conn->insert_id;

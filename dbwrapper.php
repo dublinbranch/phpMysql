@@ -54,8 +54,10 @@ class DBWrapper
             echo "Executing $sql \n";
         }
         if (strlen($sql) < 2) {
-            $err = "$sql is too short SEPPUKU!\n";
-            fwrite(STDERR, $err);
+		$err = "$sql is too short SEPPUKU!\n";
+		if(defined("STDERR")){
+			fwrite(STDERR, $err);
+		}
             file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
         }
@@ -63,7 +65,10 @@ class DBWrapper
 
         if ($res === false || $this->conn->error) {
             $err = "$sql is wrong, error is " . $this->conn->error . "\n";
-            fwrite(STDERR, $err);
+	                    if(defined("STDERR")){
+                        fwrite(STDERR, $err);
+                }
+
             file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
         }

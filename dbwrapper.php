@@ -28,6 +28,11 @@ class DBWrapper
         return $this->conn;
     }
 
+    public function escape(string $sql): string
+    {
+        return $this->conn->real_escape_string($sql);
+    }
+
     public function multiQuery(&$sql, $verbose = false, $keep = false)
     {
         throw new Exception("multiQuery is in some way broken, I (Roy) am not able to find a single working example with proper error reporting");

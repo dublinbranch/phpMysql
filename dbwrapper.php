@@ -10,7 +10,7 @@ class DBConf
     public $port = 3306;
 }
 
-require_once __DIR__ . "/../db-config.php";
+include_once __DIR__ . "/../db-config.php";
 
 class DBWrapper
 {

@@ -10,7 +10,10 @@ class DBConf
     public $port = 3306;
 }
 
-include_once __DIR__ . "/../db-config.php";
+$oldDbConfigPath = __DIR__ . "/../db-config.php";
+if( file_exists( $oldDbConfigPath ) ){
+    include_once $oldDbConfigPath;
+}
 
 class DBWrapper
 {

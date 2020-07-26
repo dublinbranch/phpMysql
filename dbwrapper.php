@@ -24,6 +24,7 @@ class DBWrapper
     {
         $this->conn = new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port);
         $this->conn->set_charset("utf8");
+        $this->singleShotQuery('SET time_zone = "UTC";');
     }
 
     public function getConn()

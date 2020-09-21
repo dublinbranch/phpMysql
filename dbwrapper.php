@@ -136,28 +136,6 @@ class DBWrapper
         return $broken;
     }
 }
-
-class STDBW
-{
-    public function get(): DBWrapper
-    {
-        include __DIR__ . "/../db-config.php";;
-        if (!self::$db) {
-            $db = new DBWrapper($db7);
-        }
-        return $db;
-
-    }
-
-    private function __construct()
-    {
-
-    }
-
-    private static ?DBWrapper $db = null;
-}
-
-
 /* Goodies
 
 $res->num_rows;

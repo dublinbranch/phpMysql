@@ -11,7 +11,7 @@ class DBConf
 }
 
 $oldDbConfigPath = __DIR__ . "/../db-config.php";
-if( file_exists( $oldDbConfigPath ) ){
+if (file_exists($oldDbConfigPath)) {
     include_once $oldDbConfigPath;
 }
 
@@ -58,10 +58,10 @@ class DBWrapper
             echo "Executing $sql \n";
         }
         if (strlen($sql) < 2) {
-		$err = "$sql is too short SEPPUKU!\n";
-		if(defined("STDERR")){
-			fwrite(STDERR, $err);
-		}
+            $err = "$sql is too short SEPPUKU!\n";
+            if (defined("STDERR")) {
+                fwrite(STDERR, $err);
+            }
             file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
         }
@@ -69,9 +69,9 @@ class DBWrapper
 
         if ($res === false || $this->conn->error) {
             $err = "$sql is wrong, error is " . $this->conn->error . "\n";
-	                    if(defined("STDERR")){
-                        fwrite(STDERR, $err);
-                }
+            if (defined("STDERR")) {
+                fwrite(STDERR, $err);
+            }
 
             file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | FILE_APPEND);
             throw new Exception($err);
@@ -136,6 +136,27 @@ class DBWrapper
         return $broken;
     }
 }
+
+class STDBW
+{
+    public function get(): DBWrapper
+    {
+        include __DIR__ . "/../db-config.php";;
+        if (!self::$db) {
+            $db = new DBWrapper($db7);
+        }
+        return $db;
+
+    }
+
+    private function __construct()
+    {
+
+    }
+
+    private static ?DBWrapper $db = null;
+}
+
 
 /* Goodies
 

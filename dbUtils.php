@@ -13,3 +13,24 @@ function base64nullable($val)
     }
     return base64this($val);
 }
+
+class Unlocker{
+    public function __destruct()
+    {
+        global $db;
+        $db->singleShotQuery("UNLOCK TABLE");
+    }
+    public function avoidOptimizeOut(){
+        return time();
+    }
+}
+class Committer{
+    public function __destruct()
+    {
+        global $db;
+        $db->singleShotQuery("COMMIT");
+    }
+    public function avoidOptimizeOut(){
+        return time();
+    }
+}

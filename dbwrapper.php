@@ -11,8 +11,9 @@ class DBConf
 }
 
 $oldDbConfigPath = __DIR__ . "/../db-config.php";
+//include will still emit a warning if the file do not exists -.- why it even exists ?
 if (file_exists($oldDbConfigPath)) {
-    include_once $oldDbConfigPath;
+    require_once $oldDbConfigPath;
 }
 
 class DBWrapper

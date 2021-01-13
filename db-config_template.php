@@ -12,6 +12,8 @@ $db1->passwd = "roy";
 $db1->user = "roy";
 
 //You can also use this nice goodie
+require_once __DIR__ . "/phpMysql/dbwrapper.php";
+
 function DBS7(): DBWrapper
 {
     static $db = null;

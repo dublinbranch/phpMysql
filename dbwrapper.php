@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/dbUtils.php';
+require_once realpath(__DIR__ . '/dbUtils.php');
 
 class DBConf
 {
@@ -18,11 +18,21 @@ if (file_exists($oldDbConfigPath)) {
 
 class DBWrapper
 {
-    private $conn;
+    private ?mysqli $conn = null;
     private $lastId;
 
-    public function __construct(DBConf $conf)
+    public function __construct(?DBConf $conf = NULL)
     {
+        if ($conf) {
+            $this->setConf($conf);
+        }
+    }
+
+    public function setConf(DBConf $conf)
+    {
+        if ($this->conn) {
+            throw new Exception("fix your code, you are not supposed to recycle this class");
+        }
         $this->conn = new mysqli($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port);
         $this->conn->set_charset("utf8");
         $this->singleShotQuery('SET time_zone = "UTC";');

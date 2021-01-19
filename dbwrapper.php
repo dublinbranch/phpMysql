@@ -45,7 +45,8 @@ class DBWrapper
 
     public function escape(string $sql): string
     {
-        return $this->conn->real_escape_string($sql);
+        $res = $this->conn->real_escape_string($sql);
+        return $res;
     }
 
     public function multiQuery(&$sql, $verbose = false, $keep = false)

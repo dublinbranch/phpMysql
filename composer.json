@@ -1,0 +1,21 @@
+
+{
+    "name": "tam/phpmysql",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Roy Bellingan",
+            "email": "roy@tech.techadsmedia.com",
+            "homepage": "https://github.com/RoyBellingan"
+        },
+        {
+            "name": "Ivano Mercuri",
+            "email": "ivano.mercuri@tech.techadsmedia.com",
+            "homepage": "https://github.com/ivanomercuri"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5 || ^8.0",
+        "ext-mysqli": "*"
+    }
+}

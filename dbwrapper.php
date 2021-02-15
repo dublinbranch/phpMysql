@@ -12,7 +12,7 @@ if (!function_exists("dummyDbWrapper")) {
         public string $host;
         public string $user;
         public string $passwd;
-        public string $db; //default database
+        public ?string $db = null; //default database
         public int $port = 3306;
         public bool $ssl = false;
     }

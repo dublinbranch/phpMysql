@@ -1,4 +1,8 @@
 <?php
+if(!function_exists("dummyDbWrapper")){
+
+function dummyDbWrapper(){}
+
 require_once realpath(__DIR__ . '/dbUtils.php');
 
 class DBConf
@@ -154,3 +158,5 @@ $res->num_rows;
 
 
 */
+
+}

@@ -104,7 +104,7 @@ if (!function_exists("dummyDbWrapper")) {
                 if (defined("STDERR")) {
                     fwrite(STDERR, $err);
                 }
-                file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | FILE_APPEND);
+                file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);
             }
             $res = $this->conn->query($sql);
@@ -115,7 +115,7 @@ if (!function_exists("dummyDbWrapper")) {
                     fwrite(STDERR, $err);
                 }
 
-                file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | FILE_APPEND);
+                file_put_contents(__DIR__ . "/error.log", $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);
             }
             $this->lastId = $this->conn->insert_id;

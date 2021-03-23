@@ -106,7 +106,7 @@ if (!function_exists("dummyDbWrapper")) {
                 }
 		$date = new DateTime();
                 $date = $date->format('Y-m-d H:i:s');
-                file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | FILE_APPEND);
+                file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);
             }
             $res = $this->conn->query($sql);
@@ -118,7 +118,7 @@ if (!function_exists("dummyDbWrapper")) {
                 }
 		$date = new DateTime();
                 $date = $date->format('Y-m-d H:i:s');
-                file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | FILE_APPEND);
+                file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);
             }
             $this->lastId = $this->conn->insert_id;

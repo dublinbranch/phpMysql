@@ -52,7 +52,7 @@ if (!function_exists("dummyDbWrapper")) {
             }
 
             $flag = 0;
-            if($conf->ssl){
+            if ($conf->ssl) {
                 $flag |= MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL;
             }
 
@@ -89,6 +89,11 @@ if (!function_exists("dummyDbWrapper")) {
             return $this->query($sql, $verbose, $keep);
         }
 
+        public function querySS($sql, $verbose = false, $keep = false)
+        {
+            return $this->query($sql, $verbose, $keep);
+        }
+
         public function query(&$sql, $verbose = false, $keep = false)
         {
             // debug
@@ -104,7 +109,7 @@ if (!function_exists("dummyDbWrapper")) {
                 if (defined("STDERR")) {
                     fwrite(STDERR, $err);
                 }
-		$date = new DateTime();
+                $date = new DateTime();
                 $date = $date->format('Y-m-d H:i:s');
                 file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);
@@ -116,7 +121,7 @@ if (!function_exists("dummyDbWrapper")) {
                 if (defined("STDERR")) {
                     fwrite(STDERR, $err);
                 }
-		$date = new DateTime();
+                $date = new DateTime();
                 $date = $date->format('Y-m-d H:i:s');
                 file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);

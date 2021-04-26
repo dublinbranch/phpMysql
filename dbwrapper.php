@@ -185,6 +185,10 @@ if (!function_exists("dummyDbWrapper")) {
             $broken = $this->conn->affected_rows;
             return $broken;
         }
+        
+        public function toggleBinLog(int $status = 0): void{
+			 $this->querySS("SET SESSION sql_log_bin = $status");
+        }
     }
     /* Goodies
 

@@ -58,7 +58,7 @@ if (!function_exists("dummyDbWrapper")) {
 
             if (!$mysqli->real_connect($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port, NULL, $flag)) {
                 die('Connect Error (' . mysqli_connect_errno() . ') '
-                    . mysqli_connect_error());
+                    . mysqli_connect_error() . "for $conf->host / $conf->user / $conf->port");
             }
 
             //echo 'Success... ' . $mysqli->host_info . "\n";

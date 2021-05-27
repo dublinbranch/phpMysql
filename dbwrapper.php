@@ -190,6 +190,11 @@ if (!function_exists("dummyDbWrapper")) {
 			 $this->querySS("SET SESSION sql_log_bin = $status");
         }
     }
+    //This is usually used as a closure for register_shutdown_function
+    function query(DBWrapper $db, $sql){
+
+        $db->query($sql);
+    }
     /* Goodies
 
     $res->num_rows;

@@ -27,6 +27,7 @@ if (!function_exists("dummyDbWrapper")) {
     {
         private ?mysqli $conn = null;
         private $lastId;
+        private DBConf conf;
 
         public function __construct(?DBConf $conf = NULL)
         {
@@ -41,7 +42,7 @@ if (!function_exists("dummyDbWrapper")) {
                 throw new Exception("fix your code, you are not supposed to recycle this class");
             }
 
-
+            $this->conf = $conf;
             $mysqli = mysqli_init();
             if (!$mysqli) {
                 die('mysqli_init failed');

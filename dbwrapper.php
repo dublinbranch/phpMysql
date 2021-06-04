@@ -27,7 +27,7 @@ if (!function_exists("dummyDbWrapper")) {
     {
         private ?mysqli $conn = null;
         private $lastId;
-        private DBConf conf;
+        private DBConf $conf;
 
         public function __construct(?DBConf $conf = NULL)
         {

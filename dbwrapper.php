@@ -27,6 +27,7 @@ if (!function_exists("dummyDbWrapper")) {
     {
         private ?mysqli $conn = null;
         private $lastId;
+        private DBConf $conf;
 
         public function __construct(?DBConf $conf = NULL)
         {
@@ -41,7 +42,7 @@ if (!function_exists("dummyDbWrapper")) {
                 throw new Exception("fix your code, you are not supposed to recycle this class");
             }
 
-
+            $this->conf = $conf;
             $mysqli = mysqli_init();
             if (!$mysqli) {
                 die('mysqli_init failed');
@@ -186,6 +187,11 @@ if (!function_exists("dummyDbWrapper")) {
         public function toggleBinLog(int $status = 0): void{
 			 $this->querySS("SET SESSION sql_log_bin = $status");
         }
+    }
+    //This is usually used as a closure for register_shutdown_function
+    function query(DBWrapper $db, $sql){
+
+        $db->query($sql);
     }
     /* Goodies
 

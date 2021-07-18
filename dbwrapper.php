@@ -56,12 +56,9 @@ if (!function_exists("dummyDbWrapper")) {
                 $flag |= MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL;
             }
 
-            if (!$mysqli->real_connect($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port, NULL, $flag)) {
-                die('Connect Error (' . mysqli_connect_errno() . ') '
-                    . mysqli_connect_error() . "for $conf->host / $conf->user / $conf->port");
+	    if (!$mysqli->real_connect($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port, NULL, $flag)) {
+		    throw new Exception('Internal DB Error -.- please retry');
             }
-
-            //echo 'Success... ' . $mysqli->host_info . "\n";
 
             $this->conn = $mysqli;
             $this->conn->set_charset("utf8");

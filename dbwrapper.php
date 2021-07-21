@@ -15,6 +15,7 @@ if (!function_exists("dummyDbWrapper")) {
         public ?string $db = null; //default database
         public int $port = 3306;
         public bool $ssl = false;
+        public int $connTimeout = 5;
     }
 
     $oldDbConfigPath = __DIR__ . "/../db-config.php";
@@ -48,7 +49,7 @@ if (!function_exists("dummyDbWrapper")) {
                 die('mysqli_init failed');
             }
 
-            if (!$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5)) {
+            if (!$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, $this->conf->connTimeout)) {
                 die('Setting MYSQLI_OPT_CONNECT_TIMEOUT failed');
             }
 

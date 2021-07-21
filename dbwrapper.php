@@ -57,8 +57,8 @@ if (!function_exists("dummyDbWrapper")) {
                 $flag |= MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL;
             }
 
-	    if (!$mysqli->real_connect($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port, NULL, $flag)) {
-		    throw new Exception('Internal DB Error -.- please retry');
+            if (!@$mysqli->real_connect($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port, NULL, $flag)) {
+                throw new Exception('Internal DB Error -.- please retry');
             }
 
             $this->conn = $mysqli;
@@ -183,13 +183,16 @@ if (!function_exists("dummyDbWrapper")) {
             $broken = $this->conn->affected_rows;
             return $broken;
         }
-        
-        public function toggleBinLog(int $status = 0): void{
-			 $this->querySS("SET SESSION sql_log_bin = $status");
+
+        public function toggleBinLog(int $status = 0): void
+        {
+            $this->querySS("SET SESSION sql_log_bin = $status");
         }
     }
+
     //This is usually used as a closure for register_shutdown_function
-    function query(DBWrapper $db, $sql){
+    function query(DBWrapper $db, $sql)
+    {
 
         $db->query($sql);
     }

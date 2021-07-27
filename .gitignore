@@ -3,3 +3,6 @@
 db-config.php
 *.cache
 *.log
+composer.lock
+vendor/
+

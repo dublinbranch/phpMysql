@@ -27,7 +27,7 @@ if (!function_exists("dummyDbWrapper")) {
     {
         private ?mysqli $conn = null;
         private $lastId;
-        private DBConf $conf;
+        private ?DBConf $conf = null;
 
         public function __construct(?DBConf $conf = NULL)
         {
@@ -38,42 +38,43 @@ if (!function_exists("dummyDbWrapper")) {
 
         public function setConf(DBConf $conf)
         {
-            if ($this->conn) {
+            if ($this->conf) {
                 throw new Exception("fix your code, you are not supposed to recycle this class");
             }
-
             $this->conf = $conf;
-            $mysqli = mysqli_init();
-            if (!$mysqli) {
-                die('mysqli_init failed');
-            }
-
-            if (!$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5)) {
-                die('Setting MYSQLI_OPT_CONNECT_TIMEOUT failed');
-            }
-
-            $flag = 0;
-            if ($conf->ssl) {
-                $flag |= MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL;
-            }
-
-            if (!@$mysqli->real_connect($conf->host, $conf->user, $conf->passwd, $conf->db, $conf->port, NULL, $flag)) {
-                throw new Exception('Internal DB Error -.- please retry');
-            }
-
-            $this->conn = $mysqli;
-            $this->conn->set_charset("utf8");
-            $this->singleShotQuery('SET time_zone = "UTC";');
         }
 
         public function getConn()
         {
+            if (!$this->conn) {
+                $mysqli = mysqli_init();
+                if (!$mysqli) {
+                    die('mysqli_init failed');
+                }
+
+                if (!$mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 5)) {
+                    die('Setting MYSQLI_OPT_CONNECT_TIMEOUT failed');
+                }
+
+                $flag = 0;
+                if ($this->conf->ssl) {
+                    $flag |= MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL;
+                }
+
+                if (!@$mysqli->real_connect($this->conf->host, $this->conf->user, $this->conf->passwd, $this->conf->db, $this->conf->port, NULL, $flag)) {
+                    throw new Exception('Internal DB Error -.- please retry');
+                }
+
+                $this->conn = $mysqli;
+                $this->getConn()->set_charset("utf8");
+                $this->singleShotQuery('SET time_zone = "UTC";');
+            }
             return $this->conn;
         }
 
         public function escape(string $sql): string
         {
-            $res = $this->conn->real_escape_string($sql);
+            $res = $this->getConn()->real_escape_string($sql);
             return $res;
         }
 
@@ -112,10 +113,10 @@ if (!function_exists("dummyDbWrapper")) {
                 file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);
             }
-            $res = $this->conn->query($sql);
+            $res = $this->getConn()->query($sql);
 
-            if ($res === false || $this->conn->error) {
-                $err = "$sql is wrong, error is " . $this->conn->error . "\n";
+            if ($res === false || $this->getConn()->error) {
+                $err = "$sql is wrong, error is " . $this->getConn()->error . "\n";
                 if (defined("STDERR")) {
                     fwrite(STDERR, $err);
                 }
@@ -124,7 +125,7 @@ if (!function_exists("dummyDbWrapper")) {
                 file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);
             }
-            $this->lastId = $this->conn->insert_id;
+            $this->lastId = $this->getConn()->insert_id;
             $time = microtime(1) - $start;
             if (defined('VERBOSE_SQL_TIME') && VERBOSE_SQL_TIME == true) {
                 echo "\n ---------- \n$sql\nin $time \n";
@@ -180,7 +181,7 @@ if (!function_exists("dummyDbWrapper")) {
         public function affectedRows(): int
         {
             //for some reason this need to be explicitly swapped, or will be optimized away
-            $broken = $this->conn->affected_rows;
+            $broken = $this->getConn()->affected_rows;
             return $broken;
         }
 

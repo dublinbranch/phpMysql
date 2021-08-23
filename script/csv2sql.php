@@ -4,21 +4,21 @@ require_once __DIR__ . "/../dbwrapper.php";
 $conf = new DBConf();
 $conf->db = "test";
 $conf->host = "127.0.0.1";
-$conf->passwd = "roy";
-$conf->user = "roy";
+$conf->passwd = "97037BF97C19A2E88CF7891";
+$conf->user = "roys14";
 
 $db = new DBWrapper($conf);
 
 //use the first line to set the name of the column
-$firstLineWithName = true;
-$fileName = "/home/roy/deletein/repack1.csv";
-$tableName = "repack1";
+$firstLineWithName = false;
+$fileName = "/var/log/nginx/familybuyer.com.log";
+$tableName = "familybuyer";
 //Some CSV exporter tool should be jailed (even if they are not phisical person) because they add COMMA in the number -.-
 $removeExtraComma = false;
 $rowNumberAsId = false;
-$idName = "uid";
-$splitWith = ",";
-$createTable = false;
+$idName = "id";
+$splitWith = " ";
+$createTable = true;
 
 $fptr = fopen("{$fileName}", "r");
 
@@ -81,7 +81,7 @@ if (!$firstLineWithName) {
 
 $maxQ = 1000;
 $i = 0;
-$baseSql = "insert into `test`.{$tableName} ($colSet) VALUES ";
+$baseSql = "insert ignore into `test`.{$tableName} ($colSet) VALUES ";
 $sql = $baseSql;
 $pending = array();
 while (!feof($fptr)) {

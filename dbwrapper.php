@@ -123,14 +123,16 @@ if (!function_exists("dummyDbWrapper")) {
                     fwrite(STDERR, $err);
                 }
                 $date = new DateTime();
-                $date = $date->format('Y-m-d H:i:s');
+                $date = $date->format('Y-m-d H:i:s.u');
                 file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);
             }
             $this->lastId = $this->getConn()->insert_id;
             $time = microtime(1) - $start;
             if (defined('VERBOSE_SQL_TIME') && VERBOSE_SQL_TIME == true) {
-                echo "\n ---------- \n$sql\nin $time \n";
+		                    $date = new DateTime();
+                $date = $date->format('Y-m-d H:i:s.u');
+		    file_put_contents(__DIR__ . "/timing.log", $date ."\n" . $sql . "\n" . $time . "\n***********************\n" , FILE_APPEND | LOCK_EX);
             }
             if (!$keep) {
                 $sql = '';

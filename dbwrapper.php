@@ -49,7 +49,7 @@ if (!function_exists("dummyDbWrapper")) {
         public function getConn()
         {
             if (!$this->conn) {
-                if(!$this->conf){
+                if (!$this->conf) {
                     throw new Exception('DB wrapper has no config!');
                 }
 
@@ -134,9 +134,9 @@ if (!function_exists("dummyDbWrapper")) {
             $this->lastId = $this->getConn()->insert_id;
             $time = microtime(1) - $start;
             if (defined('VERBOSE_SQL_TIME') && VERBOSE_SQL_TIME == true) {
-		                    $date = new DateTime();
+                $date = new DateTime();
                 $date = $date->format('Y-m-d H:i:s.u');
-		    file_put_contents(__DIR__ . "/timing.log", $date ."\n" . $sql . "\n" . $time . "\n***********************\n" , FILE_APPEND | LOCK_EX);
+                file_put_contents(__DIR__ . "/timing.log", $date . "\n" . $sql . "\n" . $time . "\n***********************\n", FILE_APPEND | LOCK_EX);
             }
             if (!$keep) {
                 $sql = '';

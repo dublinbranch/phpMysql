@@ -49,6 +49,10 @@ if (!function_exists("dummyDbWrapper")) {
         public function getConn()
         {
             if (!$this->conn) {
+                if(!$this->conf){
+                    throw new Exception('DB wrapper has no config!');
+                }
+
                 $mysqli = mysqli_init();
                 if (!$mysqli) {
                     die('mysqli_init failed');
@@ -58,9 +62,6 @@ if (!function_exists("dummyDbWrapper")) {
                     die('Setting MYSQLI_OPT_CONNECT_TIMEOUT failed');
                 }
 
-                if(!$this->conf){
-                    throw new Exception('DB wrapper has no config!');
-                }
                 $flag = 0;
                 if ($this->conf->ssl) {
                     $flag |= MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL;

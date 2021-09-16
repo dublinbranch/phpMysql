@@ -5,4 +5,4 @@ db-config.php
 *.log
 composer.lock
 vendor/
-
+.idea/*

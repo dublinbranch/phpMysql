@@ -2,6 +2,7 @@
 
 function base64this($val)
 {
+    $val = is_null($val) ? "" : $val;
     $v = base64_encode($val);
     return " FROM_BASE64('$v') ";
 }

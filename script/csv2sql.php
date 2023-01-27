@@ -17,8 +17,8 @@ $db = new DBWrapper($conf);
 
 //use the first line to set the name of the column
 $firstLineWithName = true;
-$fileName = "/home/roy/Descargas/all-37-adunits-2022-08-25.csv";
-$tableName = "adUnitTelemetryRemap";
+$fileName = "file:///home/roy/Descargas/AFD - Sedo Assets.csv";
+$tableName = "facebookAdFormat";
 //Some CSV exporter tool should be jailed (even if they are not phisical person) because they add COMMA in the number -.-
 $removeExtraComma = false;
 $rowNumberAsId = false;
@@ -91,16 +91,20 @@ $i = 0;
 $baseSql = "insert ignore into `test`.{$tableName} ($colSet) VALUES ";
 $sql = $baseSql;
 $pending = array();
-while (!feof($fptr)) {
-    $line = fgets($fptr);
-    $i++;
-    $line = trim($line);
-    if (strlen($line) < 1) { //what is that ?
-        continue;
-    }
-    $a = str_getcsv($line, $splitWith);
 
-    //print_r($a);
+//should be fine for 99% of the cases
+while (($a = fgetcsv($fptr, 0, ",")) !== FALSE) {
+//if you have an IMMENSE CSV try a hand rolled line by line splitting
+//
+//while (!feof($fptr)) {
+//    $line = fgets($fptr);
+//    $i++;
+//    $line = trim($line);
+//    if (strlen($line) < 1) { //what is that ?
+//        continue;
+//    }
+//    $a = str_getcsv($line, $splitWith);
+
     $rer = array();
     if ($rowNumberAsId) {
         $rer[] = $i;
@@ -124,6 +128,7 @@ while (!feof($fptr)) {
     if ($r1 > $h1) {
         echo "line $i \n";
         print_r($line);
+        print_r($a);
         die("\nmore line that header, fix the CSV $r1 vs $h1 (header)\n");
     }
     if ($r1 < $h1) {

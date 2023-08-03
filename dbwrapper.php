@@ -89,11 +89,6 @@ if (!function_exists("dummyDbWrapper")) {
             return $res;
         }
 
-        public function multiQuery(&$sql, $verbose = false, $keep = false)
-        {
-            throw new Exception("multiQuery is in some way broken, I (Roy) am not able to find a single working example with proper error reporting");
-        }
-
         public function singleShotQuery($sql, $verbose = false, $keep = false)
         {
             return $this->query($sql, $verbose, $keep);
@@ -102,6 +97,24 @@ if (!function_exists("dummyDbWrapper")) {
         public function querySS($sql, $verbose = false, $keep = false)
         {
             return $this->query($sql, $verbose, $keep);
+        }
+
+        //https://www.php.net/manual/en/mysqli.multi-query.php
+        public function multiQuery(&$sql){
+            $db = $this->getConn();
+            $db->multi_query($sql);
+            do {
+                /* store the result set in PHP */
+                if ($result = $db->store_result()) {
+                    while ($row = $result->fetch_row()) {
+                        printf("%s\n", $row[0]);
+                    }
+                }
+                /* print divider */
+                if ($db->more_results()) {
+                    //printf("-----------------\n");
+                }
+            } while ($db->next_result());
         }
 
         public function query(&$sql, $verbose = false, $keep = false)

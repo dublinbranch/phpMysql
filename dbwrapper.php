@@ -15,6 +15,7 @@ if (!function_exists("dummyDbWrapper")) {
         public ?string $db = null; //default database
         public int $port = 3306;
         public bool $ssl = false;
+        public bool $compress = true;
         public int $connTimeout = 5;
     }
 
@@ -65,6 +66,10 @@ if (!function_exists("dummyDbWrapper")) {
                 $flag = 0;
                 if ($this->conf->ssl) {
                     $flag |= MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL;
+                }
+
+                if($this->conf->compress){
+                    $flag |= MYSQLI_CLIENT_COMPRESS;
                 }
 
                 if (!@$mysqli->real_connect($this->conf->host, $this->conf->user, $this->conf->passwd, $this->conf->db, $this->conf->port, NULL, $flag)) {

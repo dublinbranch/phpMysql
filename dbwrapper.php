@@ -145,6 +145,8 @@ if (!function_exists("dummyDbWrapper")) {
                     echo "MySQL server has gone away! restarting connection ... \n";
                     $this->conn = null;
                     return $this->query($sql, $verbose, $keep);
+                }else{
+                    throw $e;
                 }
             }
 

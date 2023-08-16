@@ -17,14 +17,20 @@ $db = new DBWrapper($conf);
 
 //use the first line to set the name of the column
 $firstLineWithName = true;
-$fileName = "file:///home/roy/Descargas/AFD - Sedo Assets.csv";
-$tableName = "facebookAdFormat";
+$fileName = "/home/roy/Descargas/Perion_KWs-1.csv";
+$tableName = "Perion_KWs";
 //Some CSV exporter tool should be jailed (even if they are not phisical person) because they add COMMA in the number -.-
 $removeExtraComma = false;
-$rowNumberAsId = false;
+//if false will NOT use a Primary ID at all
+$rowNumberAsId = true;
+//makes only sense if the above is true
 $idName = "id";
+
 $splitWith = ",";
 $createTable = true;
+
+//batch this number of entry
+$trxSize = 1000;
 
 $fptr = fopen("{$fileName}", "r");
 
@@ -86,7 +92,6 @@ if (!$firstLineWithName) {
     rewind($fptr);
 }
 
-$maxQ = 1000;
 $i = 0;
 $baseSql = "insert ignore into `test`.{$tableName} ($colSet) VALUES ";
 $sql = $baseSql;
@@ -94,17 +99,18 @@ $pending = array();
 
 //should be fine for 99% of the cases
 while (($a = fgetcsv($fptr, 0, ",")) !== FALSE) {
+
 //if you have an IMMENSE CSV try a hand rolled line by line splitting
 //
 //while (!feof($fptr)) {
 //    $line = fgets($fptr);
-//    $i++;
 //    $line = trim($line);
 //    if (strlen($line) < 1) { //what is that ?
 //        continue;
 //    }
 //    $a = str_getcsv($line, $splitWith);
 
+    $i++;
     $rer = array();
     if ($rowNumberAsId) {
         $rer[] = $i;
@@ -143,7 +149,7 @@ while (($a = fgetcsv($fptr, 0, ",")) !== FALSE) {
     $blob = implode(',', $rer);
     $pending[] = "($blob)";
 
-    if ($i % $maxQ == 0) {
+    if ($i % $trxSize == 0) {
         $sql = $baseSql;
         $sql .= implode(',', $pending);
         $pending = array();

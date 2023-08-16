@@ -68,7 +68,7 @@ if (!function_exists("dummyDbWrapper")) {
                     $flag |= MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL;
                 }
 
-                if($this->conf->compress){
+                if ($this->conf->compress) {
                     $flag |= MYSQLI_CLIENT_COMPRESS;
                 }
 
@@ -100,7 +100,8 @@ if (!function_exists("dummyDbWrapper")) {
         }
 
         //https://www.php.net/manual/en/mysqli.multi-query.php
-        public function multiQuery(&$sql){
+        public function multiQuery(&$sql)
+        {
             $db = $this->getConn();
             $db->multi_query($sql);
             do {
@@ -137,7 +138,16 @@ if (!function_exists("dummyDbWrapper")) {
                 file_put_contents(__DIR__ . "/error.log", $date . "\n" . $err, FILE_APPEND | LOCK_EX);
                 throw new Exception($err);
             }
-            $res = $this->getConn()->query($sql);
+            try {
+                $res = $this->getConn()->query($sql);
+            } catch (Exception $e) {
+                if ($e->getMessage() == "MySQL server has gone away") {
+                    echo "MySQL server has gone away! restarting connection ... \n";
+                    $this->conn = null;
+                    return $this->query($sql, $verbose, $keep);
+                }
+            }
+
 
             if ($res === false || $this->getConn()->error) {
                 $err = "$sql is wrong, error is " . $this->getConn()->error . "\n";

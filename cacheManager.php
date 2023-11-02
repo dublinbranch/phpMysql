@@ -1,8 +1,9 @@
 <?php
 
 class Cache{
-    static public DBWrapper $db;
-    
+    //can be nullable else we can not even set it! congrats php
+    static public ?DBWrapper $db = null;
+
     
     /**
      * @param string $key

@@ -1,8 +1,9 @@
 <?php
 
-require_once 'config.php';
-
 class Cache{
+    static public DBWrapper $db;
+    
+    
     /**
      * @param string $key
      * @param int $maxAge if specified and bigger than 0 will avoid to return and old value
@@ -12,12 +13,12 @@ class Cache{
 
         $w = "";
         if($maxAge > 0){
-            $w = " AND createdAt < UNIX_TIMESTAMP() - $maxAge ";
+            $w = " AND createdAt > UNIX_TIMESTAMP() - $maxAge ";
         }
 
         $k64 = base64this($key);
         $sql = "SELECT value FROM cache WHERE `key` = $k64 $w";
-        $row = db()->getLine($sql);
+        $row = Cache::$db->getLine($sql);
         if(empty($row)){
             return null;
         }
@@ -37,7 +38,7 @@ class Cache{
         $v64 = base64this($value);
 
         $sql = "INSERT INTO cache SET `key` = $k64, value = $v64, createdAt = UNIX_TIMESTAMP(), expireAt = UNIX_TIMESTAMP() + $expire";
-        db()->query($sql);
+        Cache::$db->query($sql);
 
     }
 
@@ -57,7 +58,7 @@ value = $v64,
 createdAt = UNIX_TIMESTAMP(), 
 expireAt = UNIX_TIMESTAMP() + $expire
 EOD;
-        db()->query($sql);
+        Cache::$db->query($sql);
 
     }
 

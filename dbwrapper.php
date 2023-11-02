@@ -146,7 +146,8 @@ if (!function_exists("dummyDbWrapper")) {
                     $this->conn = null;
                     return $this->query($sql, $verbose, $keep);
                 }else{
-                    throw $e;
+
+                    throw new \Exception($e->getMessage() . "\nin sql \n" .  $sql);
                 }
             }
 

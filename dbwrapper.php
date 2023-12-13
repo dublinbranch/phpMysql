@@ -46,6 +46,10 @@ if (!function_exists("dummyDbWrapper")) {
             $this->conf = $conf;
         }
 
+        public function getConf() : DBConf{
+            return $this->conf;
+        }
+
 
         public function getConn()
         {
